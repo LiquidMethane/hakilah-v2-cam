@@ -1,0 +1,23 @@
+<div>
+
+    <table class="table">
+
+        <tbody>
+
+            <% for (let i = 0; i < rows.length; i++) { %>
+
+                <tr style="border-top: 1px solid gray; border-bottom: 1px solid gray;">
+                    <td class="ps-3" style="background-color: lightgray!important;">
+                        <%= rows[i].title %>
+                    </td>
+        
+                    <td class="ps-3"><%= rows[i].description %></td>
+                </tr>
+        
+            <% } %>
+
+        </tbody>
+
+    </table>
+    
+</div>

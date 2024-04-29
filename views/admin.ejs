@@ -1,0 +1,44 @@
+<%- include('components/head.ejs'); %>
+<%- include('components/navbar.ejs'); %>
+
+<section class="container">
+    <div class="row justify-content-around g-0">
+        <div class="content-md">
+            
+            <form action="/admin" method="post" onsubmit="return validateForm(event)">
+
+                <div>
+                    <h3>Orders</h3>
+
+                    
+                </div>
+
+                    
+
+
+            </form>
+
+        </div>
+    </div>
+        
+
+</section>
+
+
+
+<script type="text/javascript">
+
+const users = JSON.parse('<%- JSON.stringify(user) %>');
+
+
+function validateForm(e) {
+
+    return true;
+}
+
+
+</script>
+
+
+<%- include('components/footer.ejs'); %>
+<%- include('components/foot.ejs'); %>

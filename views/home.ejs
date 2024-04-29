@@ -1,0 +1,43 @@
+<%- include('components/head.ejs'); %>
+<%- include('components/navbar.ejs'); %>
+
+<article>
+
+    <a class="w-100 text-center text-decoration-none" href="product/cool-ass-gun">
+        <div class="bg-brand text-light py-2">
+            Only 10 left in stock! <u>More details ></u>
+        </div>
+    </a>
+
+    <section>
+        <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active" data-bs-interval="10000">
+                    <img src="/images/product_snout.jpg" class="d-block carousel-image">
+                </div>
+                <div class="carousel-item" data-bs-interval="10000">
+                    <img src="/images/product_simba.jpg" class="d-block carousel-image">
+                </div>
+                <div class="carousel-item" data-bs-interval="10000">
+                    <img src="/images/product_full_side.jpg" class="d-block carousel-image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+</article>
+
+
+<script type="text/javascript">
+
+
+</script>
+
+
+<%- include('components/footer.ejs'); %>
+<%- include('components/foot.ejs'); %>

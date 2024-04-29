@@ -1,0 +1,217 @@
+<%- include('components/head.ejs'); %>
+<%- include('components/navbar.ejs'); %>
+
+<section class="container">
+    <div class="row justify-content-around g-0">
+        <div class="content-md">
+            
+            <form action="/admin" method="post" onsubmit="return validateForm(event)">
+
+                <div>
+                    <h2>Checkout</h2>
+                    <hr>
+
+                    <div class="row gx-5 mt-4">
+
+                        <div class="col-lg-6">
+
+                            <section>
+
+                                <div class="mt-3 mb-4">
+                                    <h4>Shipping Details</h4>
+                                </div>
+                                
+                                <div class="row gx-3">
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label-sm">First name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm" value="<%= order.first_name %>" name="first_name" required> 
+                                    </div>
+                                            
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label-sm">Last name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-sm" value="<%= order.last_name %>" name="last_name" required> 
+                                    </div>
+                                </div>
+
+                                <div class="mt-2">
+                                    <label class="col-form-label-sm">Email Address <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" value="<%= order.email %>" name="email" required> 
+                                </div>
+
+                                <div class="mt-2">
+                                    <label class="col-form-label-sm">Phone <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" value="<%= order.phone %>" name="phone" required> 
+                                </div>
+
+                                <div class="mt-2">
+                                    <label class="col-form-label-sm">Street address <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" value="<%= order.mailing_address %>" name="mailing_address" placeholder="House number and street name" required> 
+                                    <input type="text" class="form-control form-control-sm mt-2" value="<%= order.mailing_suite %>" name="mailing_suite" placeholder="Apartment, suite, unit, etc. (optional)"> 
+                                </div>
+
+                                <div class="mt-2">
+                                    <label class="col-form-label-sm">Town / City <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" value="<%= order.mailing_city %>" name="mailing_city" required> 
+                                </div>
+
+                                <div class="mt-2">
+                                    <label class="col-form-label-sm">Province / State <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" value="<%= order.mailing_state %>" name="mailing_state" required> 
+                                </div>
+
+                                <div class="mt-2">
+                                    <label class="col-form-label-sm">Country <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" value="<%= order.mailing_country %>" name="mailing_country" required> 
+                                </div>
+
+                                <div class="mt-2">
+                                    <label class="col-form-label-sm">Postal Code <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" value="<%= order.mailing_postal_code %>" name="mailing_postal_code" required> 
+                                </div>
+
+                            </section>
+
+                            <div class="form-check mt-4">
+                                <input class="form-check-input" type="checkbox" value="" name="same_billing" id="same_billing" checked onclick="toggleBillingSection()">
+                                <label class="form-check-label" for="same_billing">
+                                    Billing address same as shipping address?
+                                </label>
+                            </div>
+
+                            <section class="mt-4" id="billing_section" style="display: none;">
+
+                                <hr>
+
+                                <div class="mt-4 mb-4">
+                                    <h4>Billing Details</h4>
+                                </div>
+
+                                <div class="mt-2">
+                                    <label class="col-form-label-sm">Street address <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" value="<%= order.billing_address %>" name="billing_address" placeholder="House number and street name" required> 
+                                    <input type="text" class="form-control form-control-sm mt-2" value="<%= order.billing_suite %>" name="billing_suite" placeholder="Apartment, suite, unit, etc. (optional)"> 
+                                </div>
+
+                                <div class="mt-2">
+                                    <label class="col-form-label-sm">Town / City <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" value="<%= order.billing_city %>" name="billing_city" required> 
+                                </div>
+
+                                <div class="mt-2">
+                                    <label class="col-form-label-sm">Province / State <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" value="<%= order.billing_state %>" name="billing_state" required> 
+                                </div>
+
+                                <div class="mt-2">
+                                    <label class="col-form-label-sm">Country <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" value="<%= order.billing_country %>" name="billing_country" required> 
+                                </div>
+
+                                <div class="mt-2">
+                                    <label class="col-form-label-sm">Postal Code <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" value="<%= order.billing_postal_code %>" name="billing_postal_code" required> 
+                                </div>
+
+                            </section>
+                        </div>
+
+                        <div class="col-lg-6">
+
+                            <section>
+
+                                <div class="mt-3 mb-4">
+                                    <h4>Your Order</h4>
+                                </div>
+
+                                <% orderItems.forEach(item => { %>
+
+                                    <div class="d-block">
+
+                                        <div class="d-inline">
+                                            <%= item.product.name %> × <%= item.quantity %>
+                                        </div>
+
+                                        <div class="float-end">
+                                            <strong>Total:&nbsp;</strong>
+                                            $<%= item.price %>
+                                        </div>
+                                    </div>
+
+                                <% }) %>
+
+                                <hr>
+
+                                <div class="mt-3">
+
+                                    <div class="row g-0">
+                                        <div class="col-4 fw-bold">Subtotal</div>
+                                        <div class="col-8">$<%= subtotal.toFixed(2) %></div>
+                                    </div>
+
+                                    <div class="row g-0 mt-2">
+                                        <div class="col-4 fw-bold">Shipping</div>
+                                        <div class="col-8">$<%= shipping.toFixed(2) %></div>
+                                    </div>
+
+                                    <div class="row g-0 mt-2">
+                                        <div class="col-4 fw-bold">Tax</div>
+                                        <div class="col-8">$<%= tax.toFixed(2) %></div>
+                                    </div>
+
+                                    <div class="row g-0 align-items-center mt-3">
+                                        <div class="col-4 fw-bold">Total</div>
+                                        <div class="col-8">
+                                            <h4>$<%= total.toFixed(2) %></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+
+                            </section>
+
+                        </div>
+
+
+                    </div>
+
+                    
+                    
+                </div>
+
+                    
+
+
+            </form>
+
+        </div>
+    </div>
+        
+
+</section>
+
+
+
+<script type="text/javascript">
+
+
+function toggleBillingSection() {
+    const checkboxElement = document.getElementById('same_billing');
+    const billingSection = document.getElementById('billing_section')
+    if (checkboxElement.checked)
+        billingSection.style.display = 'none';
+    else
+        billingSection.style.display = 'block';
+    
+}
+
+function validateForm(e) {
+
+    return false;
+}
+
+
+</script>
+
+
+<%- include('components/footer.ejs'); %>
+<%- include('components/foot.ejs'); %>

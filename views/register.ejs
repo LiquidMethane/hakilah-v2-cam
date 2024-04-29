@@ -1,0 +1,66 @@
+<%- include('components/head.ejs'); %>
+<%- include('components/navbar.ejs'); %>
+
+<section class="container">
+
+    <form action="/login" method="post" id="register_form" onsubmit="return validatePassword(event)">
+
+        <div class="d-flex justify-content-around pt-5">
+
+            <div class="auth-card">
+
+                <h3>Create account</h1>
+
+                <div class="mt-4">
+                    <label class="form-label">Email:</label><br>
+                    <input type="text" class="form-control" name="email" required>          
+                </div>
+    
+                <div class="mt-3">
+                    <label class="form-label">Password:</label><br>
+                    <input type="password" class="form-control" name="password" id="password" required>
+                </div>
+
+                <div class="mt-3">
+                    <label class="form-label">Confirm Password:</label><br>
+                    <input type="password" class="form-control" id="confirm_password" required>
+                </div>
+            
+                <button class="btn btn-primary shadow-sm mt-4 mb-4 w-100" formaction="/register" type="submit">Register</button>
+
+                <div class="text-divider text-gray">
+                    Already have an account?
+                </div>
+
+                <a href="/login" class="btn btn-outline-dark shadow-sm mt-3 w-100">Sign in</a>
+            </div>
+        </div>
+    </form>
+
+</section>
+
+
+<script type="text/javascript">
+
+const password = document.getElementById("password");
+const confirm_password = document.getElementById("confirm_password");
+
+function validatePassword(e) {
+
+    if(password.value != confirm_password.value) {
+        confirm_password.setCustomValidity("Passwords Don't Match");
+        return false;
+    }
+
+    return true;
+}
+
+confirm_password.onkeyup = function() {
+    confirm_password.setCustomValidity('');
+};
+
+</script>
+
+
+<%- include('components/footer.ejs'); %>
+<%- include('components/foot.ejs'); %>

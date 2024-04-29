@@ -1,0 +1,65 @@
+<div class="navbar navbar-expand-lg sticky-top <%- (user && user.is_admin) ? 'bg-danger' : 'bg-dark' %>" data-bs-theme="dark">
+    <a class="navbar-brand" href="/">
+        HAKILAH
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <ul class="navbar-nav ms-auto">
+
+            <% if (user && user.is_admin) { %>
+
+            <li class="nav-item me-4">
+                <a class="nav-link" href="/admin">
+                    <span class="hide-on-mobile">
+                        <span class="hide-on-mobile me-1" style="color:transparent; text-shadow: 0 0 0 rgb(255, 255, 255, 0.8); font-size: 18px;">
+                            &#127814;  <!-- EGGPLANT -->
+                        </span>
+                    </span>
+                    Admin
+                </a>
+            </li>
+
+            <% } %>
+
+
+            <% if (user) { %>
+
+            <li class="nav-item me-4">
+                <a class="nav-link" href="/orders">
+                    <span class="hide-on-mobile">
+                        <i class="fa fa-box fa-lg hide-on-mobile me-2"></i>
+                    </span>
+                    My Orders
+                </a>
+            </li>
+
+            <% } %>
+
+            <li class="nav-item me-4">
+                <a class="nav-link" href="/cart">
+                    <span class="hide-on-mobile">
+                        <i class="fa fa-shopping-cart fa-lg hide-on-mobile me-2"></i>
+                    </span>
+                    Cart
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/account">
+                    <span class="hide-on-mobile">
+                        <i class="fa fa-user fa-lg hide-on-mobile me-2"></i>
+                    </span>
+                    My Account
+                </a>
+            </li>
+
+        </ul>
+    </div>
+</div>
+
+<div style="min-height: 100%">

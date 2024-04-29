@@ -1,0 +1,129 @@
+<%- include('../components/head.ejs'); %>
+<%- include('../components/navbar.ejs'); %>
+
+<article class="container-fluid content-lg">
+
+    <div class="row no-gutters pt-5">
+
+        <section class="col-xl-4">
+            
+            <%- include('../components/imageBoard.ejs', { 
+                images: [
+                    '/images/product_snout.jpg',
+                    '/images/product_full.jpg',
+                    '/images/product_simba.jpg',
+                    '/images/product_snout.jpg',
+                    '/images/product_full.jpg',
+                    '/images/product_simba.jpg'
+                ]
+            }) %>
+    
+        </section>
+    
+    
+        <section class="col-xl-8 product-info">
+    
+            <h1><%= product.name %></h1>
+
+            <div class="product-description mt-4">
+                Brief product description with some basic information.  This is where you describe
+                what it's made of, and what it's made for.
+            </div>
+
+            <h2 class="mt-4">$<%= product.price_per_cad %> CAD</h2>
+
+            <div class="add-cart-button-container d-flex align-items-baseline flex-wrap mt-4">
+
+                <button class="add-cart-button bg-brand mt-2" onclick="addToCart('<%= product.id %>')">
+                    <i class="fa fa-shopping-cart me-1"></i>
+                    Add to Cart
+                </button>
+    
+                <div class="alert alert-success mt-2 p-2 mb-0" style="display: none;" id="addedToCartText">
+                    <i class="fa fa-check me-1"></i>
+                    Added to Cart! <div id="addCountText" style="display: none;"></div>
+                </div>
+
+            </div>
+
+
+            <div class="my-5"></div>
+
+
+            <%- include('../components/detailsTable.ejs', { 
+                rows: [
+                    {
+                        title: 'Dimensions',
+                        description: '227.3 mm x 40.2 mm x 394.4 mm'
+                    },
+                    {
+                        title: 'Composition',
+                        description: 'Titanium'
+                    },
+                    {
+                        title: 'Color',
+                        description: 'Dark Grey'
+                    }
+                ]
+            }) %>
+            
+            
+    
+        </section>
+
+    </div>  
+
+</article>
+
+
+
+<script type="text/javascript">
+
+const users = JSON.parse('<%- JSON.stringify(user) %>');
+let addCount = 0;
+
+function validateForm(e) {
+
+    return true;
+}
+
+function addToCart(productId) {
+    addCount += 1
+    console.log("Added to cart: ", JSON.parse('<%- JSON.stringify(product) %>'))
+    document.getElementById('addedToCartText').style.display = 'block'
+
+    if (addCount > 1)
+        document.getElementById('addCountText').style.display = 'inline'
+    document.getElementById('addCountText').innerText = "(" + addCount.toString() + ")"
+
+    let cartItems = []
+    if ('cart' in localStorage) {
+        try {
+            cartItems = JSON.parse(localStorage.getItem('cart'))
+            console.log("GOT ITEM")
+        } catch {
+            cartItems = []
+        }
+    }
+
+    cartItemIndex = cartItems.findIndex(item => item.id == productId)
+
+    // item already exists in cart
+    if (cartItemIndex == -1)
+        cartItems.push({id: productId, quantity: 1})
+    else
+        cartItems[cartItemIndex].quantity += 1
+
+    try {
+        localStorage.setItem('cart', JSON.stringify(cartItems))
+    } catch {
+        console.log("Could not add item to cart")
+    }
+}
+
+
+</script>
+
+
+<%- include('../components/footer.ejs'); %>
+<%- include('../components/foot.ejs'); %>

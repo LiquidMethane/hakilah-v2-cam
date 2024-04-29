@@ -1,0 +1,23 @@
+
+
+.navbar {
+   box-shadow: 0 .125rem .30rem rgba(0, 0, 0, 0.4)!important;
+   padding-left: 5%;
+   padding-right: 5%;
+}
+
+.nav-link {
+   color: rgb(255, 255, 255, 0.8)
+}
+
+.container, .container-sm {
+   padding-top: 50px;
+   padding-bottom: 50px;
+}
+
+@media screen and (max-width: 767px) {
+   .container, .container-sm {
+      padding-top: 25px;
+      padding-bottom: 25px;
+   }
+}

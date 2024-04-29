@@ -1,0 +1,42 @@
+<div>
+
+    <img src="<%= images[0]; %>" class="product-img" id="main-product-img">
+
+    <div class="d-flex justify-content-start flex-wrap">
+        <% for (let i = 0; i < images.length; i++) { %>
+            <img src="<%= images[i] %>" class="product-tab" onmouseenter="showImage('<%=i%>')" onmouseleave="hideImage()" onclick="changeImage('<%= i %>')">
+        <% } %>
+    </div>
+
+</div>
+
+<script type="application/javascript">
+
+let mainElement = document.getElementById('main-product-img')       // large image
+let tabElements = document.getElementsByClassName('product-tab')    // row of little images
+let mainImageSrc = mainElement.src                                  // large image SRC
+
+
+function showImage(index) {
+    if (mainElement.src != tabElements[index].src) {
+        mainElement.src = tabElements[index].src
+    }
+}
+
+function hideImage() {
+    if (mainElement.src != mainImageSrc)
+        mainElement.src = mainImageSrc
+}
+
+function changeImage(index) {
+
+    if (mainImageSrc != tabElements[index].src)
+        mainImageSrc = tabElements[index].src
+
+    if (mainElement.src != mainImageSrc)
+        mainElement.src = mainImageSrc
+}
+
+
+</script>
+

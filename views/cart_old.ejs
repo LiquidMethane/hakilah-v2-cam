@@ -1,0 +1,243 @@
+<%- include('components/head.ejs'); %>
+<%- include('components/navbar.ejs'); %>
+
+<div class="container">
+    <div class="row justify-content-around g-0">
+        <div class="content-md">
+            
+            <form action="/cart" method="post" onsubmit="return validateForm(event)">
+
+                <section>
+                    <h3>Cart</h3>
+                    <hr class="mb-4">
+                    <div id="cart-items-container"></div>
+                </section>
+                
+                <section class="mt-5">
+
+                    <h3>Cart Totals</h3>
+                    <hr class="mb-4">
+
+                    <table class="table">
+                        <tr>
+                            <td class="table-row">Subtotal</td>
+                            <td>
+                                <input type="text" class="form-control-plaintext" id="subtotal-fee" readonly>       
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="table-row">Shipping</td>
+                            <td>
+                                <input type="text" class="form-control-plaintext" value="$<%= shipping_fee %>.00" id="shipping-fee" readonly>       
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="table-row">Tax</td>
+                            <td>
+                                <input type="text" class="form-control-plaintext" value="Calculated at checkout" readonly>     
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="table-row">Estimated Pre-Tax Total</td>
+                            <td>
+                                <input type="text" class="form-control-plaintext form-control-sm" id="total-fee" readonly>       
+                            </td>
+                        </tr>
+                    </table>
+                </section>
+
+                <div class="d-flex justify-content-end">
+                    <input type="hidden" name="cart" id="card-payload" />
+                    <button type="submit" class="btn btn-primary" id="checkout-button">
+                        Proceed to Checkout
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+        
+
+</div>
+
+
+
+<script type="text/javascript">
+
+const user = JSON.parse('<%- (user) ? JSON.stringify(user) : "null" %>');
+
+let cartItems = [];
+try {
+    const storageItems = JSON.parse(localStorage.getItem('cart'));
+    cartItems = storageItems ? storageItems : [];
+} catch {}
+
+
+let cartItemsContainer = document.getElementById('cart-items-container');
+
+let subtotalFeeElement = document.getElementById('subtotal-fee');
+let shippingFeeElement = document.getElementById('shipping-fee');
+let totalFeeElement = document.getElementById('total-fee');
+
+let checkoutButtonElement = document.getElementById('checkout-button');
+
+function updateSubtotal() {
+    let subtotal = 0;
+    const subtotalElements = document.getElementsByClassName('cart-item-subtotal-text');
+
+    for (let i = 0; i < subtotalElements.length; i++) {
+        subtotal += parseFloat(subtotalElements[i].innerText.slice(1))
+    }
+
+    subtotalFeeElement.value = "$" + subtotal.toFixed(2)
+}
+
+function updateTotal() {
+    const subtotal = parseFloat(subtotalFeeElement.value.slice(1));
+    const shipping = parseFloat(shippingFeeElement.value.slice(1));
+    const total = "$" + (subtotal + shipping).toFixed(2);
+    totalFeeElement.value = total;
+}
+
+function updateCheckoutButton() {
+    checkoutButtonElement.disabled = (document.getElementsByClassName('cart-item').length == 0);
+}
+
+
+cartItems.forEach((item, index) => {
+    
+    let itemElement = document.createElement('div');
+    itemElement.classList.add('cart-item');
+
+    // =============== Add Item Image =============== //
+    
+    let imgElement = document.createElement('img');
+    imgElement.classList.add('cart-item-image', 'col-md-3');
+    imgElement.src = "https://img.freepik.com/free-photo/isolated-happy-smiling-dog-white-background-portrait-4_1562-693.jpg?w=2000"
+    itemElement.appendChild(imgElement)
+
+
+    // =============== Add Item Name =============== //
+
+    let textContainerElement = document.createElement('div');
+    textContainerElement.classList.add('col-md-8', 'cart-item-text-container');
+    itemElement.appendChild(textContainerElement);
+
+    let nameElement = document.createElement('h2');
+    nameElement.classList.add('cart-item-name');
+    nameElement.innerText = item.name;
+    textContainerElement.appendChild(nameElement);
+    
+
+    // =============== Add Count Input =============== //
+
+    let itemSubtotalElement = document.createElement('h5');
+
+    let countInputElement = document.createElement('input');
+    countInputElement.classList.add('form-control', 'cart-item-count');
+    countInputElement.type = 'number';
+    countInputElement.value = item.count;
+
+    const MIN_COUNT = 1
+    const MAX_COUNT = 10
+
+    countInputElement.min = MIN_COUNT;
+    countInputElement.max = MAX_COUNT;
+
+    countInputElement.onchange = function(event) {
+        const value = event.target.value
+        
+        if (value > MAX_COUNT)
+            countInputElement.value = MAX_COUNT;
+        else if (value < MIN_COUNT)
+            countInputElement.value = MIN_COUNT;
+        
+        itemSubtotalElement.innerText = "$" + (item.price_per * countInputElement.value).toFixed(2);
+
+        updateSubtotal();
+        updateTotal();
+    }
+
+    // ==== Add Price Text ==== //
+
+    let priceContainerElement = document.createElement('div');
+    priceContainerElement.classList.add('d-flex', 'justify-content-start', 'align-items-baseline');
+    priceContainerElement.appendChild(countInputElement);
+    priceContainerElement.appendChild(itemSubtotalElement);
+    textContainerElement.appendChild(priceContainerElement);
+
+    itemSubtotalElement.classList.add('cart-item-subtotal-text', 'ms-3');
+    itemSubtotalElement.innerText = "$" + (item.price_per * countInputElement.value).toFixed(2)
+
+    
+    // =============== Add Remove Button =============== //
+
+    let removeButtonContainer = document.createElement('div');
+    removeButtonContainer.classList.add('w-100', 'd-flex', 'justify-content-end');
+    textContainerElement.appendChild(removeButtonContainer);
+
+    let removeButtonElement = document.createElement('button');
+    removeButtonElement.classList.add('btn', 'btn-secondary');
+    removeButtonElement.type = "button";
+    removeButtonElement.innerText = "Remove";
+    removeButtonElement.onclick = function(event) {
+        itemElement.remove();
+        updateSubtotal();
+        updateTotal();
+        updateCheckoutButton();
+    }
+    removeButtonContainer.appendChild(removeButtonElement);
+
+
+    // =============== Add Item ID =============== //
+    let idInputElement = document.createElement('input');
+    idInputElement.classList.add('cart-item-id')
+    idInputElement.hidden = true;
+    idInputElement.value = item.id;
+    itemElement.appendChild(idInputElement)
+
+    // =============== Add Item to List =============== //
+
+    cartItemsContainer.appendChild(itemElement);
+})
+
+
+updateSubtotal();
+updateTotal();
+updateCheckoutButton();
+
+
+
+
+function validateForm() {
+    const ids = document.getElementsByClassName('cart-item-id');
+    const counts = document.getElementsByClassName('cart-item-count');
+
+    let newCartItems = []
+
+    for (var i = 0; i < ids.length; i++) {
+        newCartItems.push({
+            id: ids[i].value,
+            count: counts[i].value
+        })
+    }
+
+    if (newCartItems.length) {
+        document.getElementById('card-payload').value = JSON.stringify(newCartItems)
+        return true
+    }
+
+    
+    return false;
+}
+
+
+</script>
+
+
+<%- include('components/footer.ejs'); %>
+<%- include('components/foot.ejs'); %>

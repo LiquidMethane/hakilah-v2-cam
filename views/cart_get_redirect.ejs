@@ -1,0 +1,32 @@
+<html>
+
+<body>
+
+    <!-- GET CART FROM USER'S LOCAL STORAGE -->
+
+    <form id="redirect-form" method="post">
+        <input type="hidden" name="cart" id="cart">
+        <input type="hidden" name="action" value="show_cart">
+    </form>
+
+    <script type="text/javascript">
+
+        let cartInput = document.getElementById('cart')
+        cartInput.value = "[]"
+
+        try {
+            let cartValue = localStorage.getItem('cart')
+
+            if (cartValue) {
+                const cartValueParsed = JSON.parse(cartValue)
+                if (Array.isArray(cartValueParsed))
+                    cartInput.value = cartValue
+            }
+        } catch {}
+        
+        document.getElementById('redirect-form').submit()
+        
+    </script>
+</body>
+
+</html>
